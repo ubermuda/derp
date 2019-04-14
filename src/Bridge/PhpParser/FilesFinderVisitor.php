@@ -1,21 +1,14 @@
 <?php
 
-namespace LambdaPackager;
+namespace LambdaPackager\Bridge\PhpParser;
 
-use LambdaPackager\Strategy\ClassConstantStrategy;
-use LambdaPackager\Strategy\ExtendsStrategy;
-use LambdaPackager\Strategy\FunctionCallStrategy;
-use LambdaPackager\Strategy\ImplementsStrategy;
-use LambdaPackager\Strategy\NewClassStrategy;
-use LambdaPackager\Strategy\StaticCallStrategy;
-use LambdaPackager\Strategy\Strategy;
-use LambdaPackager\Strategy\UseStrategy;
+use LambdaPackager\Bridge\PhpParser\Strategy;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 class FilesFinderVisitor extends NodeVisitorAbstract
 {
-    /** @var Strategy[] */
+    /** @var Strategy\Strategy[] */
     private $strategies = [];
 
     /** @var string[] */
@@ -24,13 +17,13 @@ class FilesFinderVisitor extends NodeVisitorAbstract
     public function __construct()
     {
         $this->strategies = [
-            new ClassConstantStrategy(),
-            new ExtendsStrategy(),
-            new FunctionCallStrategy(),
-            new ImplementsStrategy(),
-            new NewClassStrategy(),
-            new StaticCallStrategy(),
-            new UseStrategy(),
+            new Strategy\ClassConstantStrategy(),
+            new Strategy\ExtendsStrategy(),
+            new Strategy\FunctionCallStrategy(),
+            new Strategy\ImplementsStrategy(),
+            new Strategy\NewClassStrategy(),
+            new Strategy\StaticCallStrategy(),
+            new Strategy\UseStrategy(),
         ];
     }
 

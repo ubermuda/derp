@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Strategy;
+namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
 use PhpParser\Node;
 
-class StaticCallStrategy extends ClassStrategy
+class NewClassStrategy extends ClassStrategy
 {
     public function supports(Node $node): bool
     {
         return
-               $node instanceof Node\Expr\StaticCall
+               $node instanceof Node\Expr\New_
             && $node->class instanceof Node\Name\FullyQualified
             && $this->isProcessable($node->class->toString());
     }

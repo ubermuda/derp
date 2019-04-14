@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Strategy;
+namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
 use PhpParser\Node;
 use ReflectionFunction;

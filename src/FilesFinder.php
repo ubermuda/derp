@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager;
 
+use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
