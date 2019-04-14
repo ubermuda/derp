@@ -11,7 +11,7 @@ class ImplementsStrategy extends ClassStrategy
     public function supports(Node $node): bool
     {
         return
-            $node instanceof Node\Stmt\Class_
+               $node instanceof Node\Stmt\Class_
             && count($node->implements) > 0;
     }
 

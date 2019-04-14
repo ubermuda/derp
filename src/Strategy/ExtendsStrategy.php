@@ -11,7 +11,7 @@ class ExtendsStrategy extends ClassStrategy
     public function supports(Node $node): bool
     {
         return
-            $node instanceof Node\Stmt\Class_
+               $node instanceof Node\Stmt\Class_
             && $node->extends instanceof Node\Name\FullyQualified
             && $this->isProcessable($node->extends->toString());
     }

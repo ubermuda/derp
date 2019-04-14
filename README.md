@@ -10,7 +10,7 @@ This will parse your code (using `nikic/php-parser`) and try to detect every PHP
 
 I don't really know, you tell me.
 
-Right now, using this to package itself, here are the results:
+Right now, using this to package itself, here are the resulting packages sizes:
 
 ```console
 3.3M    LambdaPackager
@@ -20,6 +20,15 @@ Right now, using this to package itself, here are the results:
 ```
 
 (Not sure if the zip files size is relevant, including it just in case)
+
+And number of files:
+
+```console
+696     LambdaPackager
+218     LambdaPackager-packaged
+```
+
+(Pretty sure number of files is totally irrelevant :p)
 
 ## Usage
 
