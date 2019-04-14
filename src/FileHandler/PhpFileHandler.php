@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace LambdaPackager\FileHandler;
 
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 
-class FilesFinder
+class PhpFileHandler implements FileHandler
 {
     /** @var \PhpParser\Parser */
     private $parser;
@@ -38,7 +38,7 @@ class FilesFinder
         $this->traverser = $traverser;
     }
 
-    public function find(string $fileName): array
+    public function extractFileNames(string $fileName): array
     {
         $this->files[] = $fileName;
         $this->currentlyProcessingFileNames[] = $fileName;
@@ -53,8 +53,6 @@ class FilesFinder
 
     private function processFile(string $fileName): void
     {
-//        echo '>>> Looking in '.$fileName.PHP_EOL;
-
         $stmts = $this->parser->parse(file_get_contents($fileName));
 
         $this->traverser->traverse($stmts);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LambdaPackager;
 
 use LambdaPackager\Autoload\ComposerAutoload;
+use LambdaPackager\FileHandler\FileHandlerRegistry;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -25,6 +26,9 @@ class Packager
     /** @var Filesystem */
     private $fs;
 
+    /** @var FileHandlerRegistry */
+    private $handlerRegistry;
+
     public function __construct(string $manifestPath, string $buildDir, array $collisions = [])
     {
         $this->collisions = $collisions;
@@ -38,6 +42,7 @@ class Packager
         $this->buildDir = $buildDir;
 
         $this->fs = new Filesystem();
+        $this->handlerRegistry = new FileHandlerRegistry();
     }
 
     public function package()
@@ -49,10 +54,10 @@ class Packager
         $this->fs->mkdir($this->buildDir);
 
         $files = [];
-        $finder = new FilesFinder();
 
         foreach ($this->manifest as $fileName) {
-            $files = array_merge($files, $finder->find($fileName));
+            $handler = $this->handlerRegistry->getFileHandler($fileName);
+            $files = array_merge($files, $handler->extractFileNames($fileName));
         }
 
         if ('composer' === $this->manifest->getAutoload()) {

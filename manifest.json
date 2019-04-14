@@ -1,6 +1,8 @@
 {
     "include": [
-        "bin/package.php"
+        "bin/package.php",
+        "manifest.json",
+        "composer.*"
     ],
 
     "autoload": "composer"
