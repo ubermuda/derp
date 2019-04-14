@@ -1,0 +1,7 @@
+{
+    "include": [
+        "bin/package.php"
+    ],
+
+    "autoload": "composer"
+}
