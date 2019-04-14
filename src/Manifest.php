@@ -25,15 +25,16 @@ class Manifest implements IteratorAggregate
 
         $manifest = json_decode(file_get_contents($path), true);
 
-        $this->include = array_map(function (string $fileName) {
-            if (substr($fileName, 0, 1) !== '/') {
-                $fileName = $this->projectRoot.'/'.$fileName;
-            }
-
-            return $fileName;
-        }, $manifest['include']);
-
         $this->autoload = $manifest['autoload'];
+        $this->include = [];
+
+        foreach ($manifest['include'] as $include) {
+            $absolutePathInclude = $this->getAbsolutePath($include);
+            $resolvedIncludes = $this->resolveGlob($absolutePathInclude);
+
+            $this->include = array_merge($this->include, $resolvedIncludes);
+
+        }
     }
 
     public function getProjectRoot(): string
@@ -49,5 +50,23 @@ class Manifest implements IteratorAggregate
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->include);
+    }
+
+    private function getAbsolutePath(string $fileName): string
+    {
+        if (substr($fileName, 0, 1) !== '/') {
+            $fileName = $this->projectRoot.'/'.$fileName;
+        }
+
+        return $fileName;
+    }
+
+    private function resolveGlob(string $fileName): array
+    {
+        if (false === $resolvedFileNames = glob($fileName)) {
+            throw new \RuntimeException(sprintf('Could not resolve glob expression "%s"', $fileName));
+        }
+
+        return $resolvedFileNames;
     }
 }
