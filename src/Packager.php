@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager;
 
+use LambdaPackager\Autoload\ComposerAutoload;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -55,13 +56,7 @@ class Packager
         }
 
         if ('composer' === $this->manifest->getAutoload()) {
-            $files[] = $this->projectRoot.'/vendor/autoload.php';
-
-            $files = array_merge($files, glob($this->projectRoot.'/vendor/composer/*.php'));
-
-            if (file_exists($autoloadFiles = $this->projectRoot.'/vendor/composer/autoload_files.php')) {
-                $files = array_merge($files, array_values(include($autoloadFiles)));
-            }
+            $files = array_merge($files, (new ComposerAutoload($this->projectRoot))->extractFileNames());
         }
 
         $files = array_map([$this, 'fixDependencyCollision'], $files);
