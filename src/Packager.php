@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LambdaPackager;
 
 use LambdaPackager\Autoload\ComposerAutoload;
+use LambdaPackager\Extension\Extension;
+use LambdaPackager\Extension\ManifestAwareExtension;
 use LambdaPackager\FileHandler\FileHandlerRegistry;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,8 +19,8 @@ class Packager
     /** @var string */
     private $projectRoot;
 
-    /** @var string[] */
-    private $collisions;
+    /** @var Extension */
+    private $extension;
 
     /** @var string */
     private $buildDir;
@@ -29,9 +31,8 @@ class Packager
     /** @var FileHandlerRegistry */
     private $handlerRegistry;
 
-    public function __construct(string $manifestPath, string $buildDir, array $collisions = [])
+    public function __construct(string $manifestPath, string $buildDir, Extension $extension)
     {
-        $this->collisions = $collisions;
         $this->manifest = new Manifest(realpath($manifestPath));
         $this->projectRoot = $this->manifest->getProjectRoot();
 
@@ -41,6 +42,11 @@ class Packager
 
         $this->buildDir = $buildDir;
 
+        if ($extension instanceof ManifestAwareExtension) {
+            $extension->setManifest($this->manifest);
+        }
+
+        $this->extension = $extension;
         $this->fs = new Filesystem();
         $this->handlerRegistry = new FileHandlerRegistry();
     }
@@ -64,12 +70,12 @@ class Packager
             $files = array_merge($files, (new ComposerAutoload($this->projectRoot))->extractFileNames());
         }
 
-        $files = array_map([$this, 'fixDependencyCollision'], $files);
+        $files = $this->extension->beforeCopy($files);
 
-        $this->packageFiles($files);
+        $this->copy($files);
     }
 
-    private function packageFiles(array $fileNames)
+    private function copy(array $fileNames)
     {
         foreach ($fileNames as $absoluteFileName) {
             $relativePath = $this->getRelativePath($absoluteFileName);
@@ -94,16 +100,5 @@ class Packager
         }
 
         return ltrim(str_replace($this->projectRoot, '', $absolutePath), '/');
-    }
-
-    private function fixDependencyCollision(string $fileName): string
-    {
-        foreach ($this->collisions as $collision) {
-            if ($collision !== $this->projectRoot && false !== strpos($fileName, $collision)) {
-                return str_replace($collision, $this->projectRoot, $fileName);
-            }
-        }
-
-        return $fileName;
     }
 }
