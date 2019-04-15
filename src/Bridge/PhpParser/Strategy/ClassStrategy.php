@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
+use LambdaPackager\Bridge\PhpParser\CouldNotAutoloadClassException;
 use ReflectionClass;
 
 abstract class ClassStrategy implements Strategy
@@ -16,7 +17,7 @@ abstract class ClassStrategy implements Strategy
     protected function isProcessable(string $className): bool
     {
         if (!(class_exists($className) || interface_exists($className))) {
-            throw new \RuntimeException(sprintf('Found class "%s" but could not autoload it', $className));
+            throw new CouldNotAutoloadClassException($className);
         }
 
         if ((new ReflectionClass($className))->isInternal()) {

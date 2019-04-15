@@ -8,13 +8,18 @@ use PhpParser\NodeVisitorAbstract;
 
 class FilesFinderVisitor extends NodeVisitorAbstract
 {
+    private const AUTOLOAD_FAIL_STRATEGY_SKIP = 'skip';
+
     /** @var Strategy\Strategy[] */
     private $strategies = [];
 
     /** @var string[] */
     private $files = [];
 
-    public function __construct()
+    /** @var string */
+    private $autoloadFailStrategy;
+
+    public function __construct($autoloadFailStrategy = self::AUTOLOAD_FAIL_STRATEGY_SKIP)
     {
         $this->strategies = [
             new Strategy\ClassConstantStrategy(),
@@ -25,6 +30,8 @@ class FilesFinderVisitor extends NodeVisitorAbstract
             new Strategy\StaticCallStrategy(),
             new Strategy\UseStrategy(),
         ];
+
+        $this->autoloadFailStrategy = $autoloadFailStrategy;
     }
 
     public function all(): array
@@ -53,8 +60,16 @@ class FilesFinderVisitor extends NodeVisitorAbstract
          */
 
         foreach ($this->strategies as $strategy) {
-            if ($strategy->supports($node)) {
-                $this->files = array_merge($this->files, $strategy->extractFileNames($node));
+            try {
+                if ($strategy->supports($node)) {
+                    $this->files = array_merge($this->files, $strategy->extractFileNames($node));
+                }
+            } catch (CouldNotAutoloadClassException $e) {
+                if ($this->autoloadFailStrategy === self::AUTOLOAD_FAIL_STRATEGY_SKIP) {
+                    continue;
+                }
+
+                throw new CouldNotProcessNodeException($node, $e);
             }
         }
     }

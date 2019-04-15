@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
+use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -55,7 +56,11 @@ class PhpFileHandler implements FileHandler
     {
         $stmts = $this->parser->parse(file_get_contents($fileName));
 
-        $this->traverser->traverse($stmts);
+        try {
+            $this->traverser->traverse($stmts);
+        } catch (CouldNotProcessNodeException $e) {
+            throw new \RuntimeException(sprintf('Error while processing node in "%s" at line %d', $fileName, $e->getNode()->getStartLine()), 0, $e);
+        }
 
         foreach ($this->visitor->all() as $foundFileName) {
             if ($this->fileNeedsProcessing($foundFileName)) {
