@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager;
 
-use LambdaPackager\Autoload\ComposerAutoload;
+use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\Extension\Extension;
 use LambdaPackager\Extension\ManifestAwareExtension;
 use LambdaPackager\FileHandler\FileHandlerRegistry;
@@ -51,13 +51,16 @@ class Packager
         $this->handlerRegistry = new FileHandlerRegistry();
     }
 
-    public function package()
+    public function package(): void
     {
         if (file_exists($this->buildDir)) {
             $this->fs->remove($this->buildDir);
         }
 
         $this->fs->mkdir($this->buildDir);
+
+        $autoload = (new AutoloadFactory())->createForManifest($this->manifest);
+        $autoload->initialize();
 
         $files = [];
 
@@ -66,16 +69,14 @@ class Packager
             $files = array_merge($files, $handler->extractFileNames($fileName));
         }
 
-        if ('composer' === $this->manifest->getAutoload()) {
-            $files = array_merge($files, (new ComposerAutoload($this->projectRoot))->extractFileNames());
-        }
+        $files = array_merge($files, $autoload->extractFileNames());
 
         $files = $this->extension->beforeCopy($files);
 
         $this->copy($files);
     }
 
-    private function copy(array $fileNames)
+    private function copy(array $fileNames): void
     {
         foreach ($fileNames as $absoluteFileName) {
             $relativePath = $this->getRelativePath($absoluteFileName);

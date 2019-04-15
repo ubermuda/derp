@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Autoload;
 
-class ComposerAutoload
+use LambdaPackager\Manifest;
+
+class ComposerAutoload implements Autoload
 {
     /** @var string */
     private $projectRoot;
 
-    public function __construct(string $projectRoot)
+    public function __construct(Manifest $manifest)
     {
-        $this->projectRoot = $projectRoot;
+        $this->projectRoot = $manifest->getProjectRoot();
+    }
+
+    public function initialize(): void
+    {
+        require_once $this->projectRoot.'/vendor/autoload.php';
     }
 
     public function extractFileNames(): array

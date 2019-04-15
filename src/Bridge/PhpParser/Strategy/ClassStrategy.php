@@ -15,6 +15,14 @@ abstract class ClassStrategy implements Strategy
 
     protected function isProcessable(string $className): bool
     {
-        return (class_exists($className) || interface_exists($className)) && false === (new ReflectionClass($className))->isInternal();
+        if (!(class_exists($className) || interface_exists($className))) {
+            throw new \RuntimeException(sprintf('Found class "%s" but could not autoload it', $className));
+        }
+
+        if ((new ReflectionClass($className))->isInternal()) {
+            return false;
+        }
+
+        return true;
     }
 }
