@@ -6,12 +6,11 @@ namespace LambdaPackager;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Traversable;
 
 class Dependency implements IteratorAggregate
 {
     /** @var self[] */
-    private $children;
+    private $children = [];
 
     /** @var string */
     private $filePath;
@@ -26,12 +25,18 @@ class Dependency implements IteratorAggregate
         return $this->filePath;
     }
 
-    public function createChild(string $filePath)
+    public function createChild(string $filePath): Dependency
     {
         $child = new self($filePath);
         $this->add($child);
 
         return $child;
+    }
+
+    /** @return Dependency[] */
+    public function all(): array
+    {
+        return $this->children;
     }
 
     public function add(self $child): self
@@ -41,6 +46,7 @@ class Dependency implements IteratorAggregate
         return $this;
     }
 
+    /** @param Dependency[] $children */
     public function addAll(array $children): self
     {
         foreach ($children as $child) {
@@ -50,7 +56,7 @@ class Dependency implements IteratorAggregate
         return $this;
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->children);
     }

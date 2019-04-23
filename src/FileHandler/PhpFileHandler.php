@@ -37,14 +37,14 @@ class PhpFileHandler implements FileHandler
         $this->traverser = $traverser;
     }
 
-    public function extractDependencies(string $fileName): array
+    public function extractDependencies(Dependency $dependency): array
     {
-        $stmts = $this->parser->parse(file_get_contents($fileName));
+        $stmts = $this->parser->parse(file_get_contents($dependency->getFilePath()));
 
         try {
             $this->traverser->traverse($stmts);
         } catch (CouldNotProcessNodeException $e) {
-            throw new RuntimeException(sprintf('Error while processing node in "%s" at line %d', $fileName, $e->getNode()->getStartLine()), 0, $e);
+            throw new RuntimeException(sprintf('Error while processing node in "%s" at line %d', $dependency->getFilePath(), $e->getNode()->getStartLine()), 0, $e);
         }
 
         return $this->getUniqueDependencies($this->visitor->all());

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
+use LambdaPackager\Dependency;
+
 class DefaultFileHandler implements FileHandler
 {
-    public function extractDependencies(string $fileName): array
+    public function extractDependencies(Dependency $dependency): array
     {
-        return [$fileName];
+        return [$dependency->getFilePath()];
     }
 }

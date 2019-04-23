@@ -9,5 +9,5 @@ use LambdaPackager\Dependency;
 interface FileHandler
 {
     /** @return Dependency[] */
-    public function extractDependencies(string $fileName): array;
+    public function extractDependencies(Dependency $dependency): array;
 }

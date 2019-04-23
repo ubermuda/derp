@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
+use LambdaPackager\Dependency;
+
 class FileHandlerRegistry
 {
     /** @var FileHandler[] */
@@ -21,9 +23,9 @@ class FileHandlerRegistry
         $this->defaultHandler = new DefaultFileHandler();
     }
 
-    public function getFileHandler(string $fileName): FileHandler
+    public function getHandler(Dependency $dependency): FileHandler
     {
-        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $extension = pathinfo($dependency->getFilePath(), PATHINFO_EXTENSION);
 
         return $this->handlers[$extension] ?? $this->defaultHandler;
     }

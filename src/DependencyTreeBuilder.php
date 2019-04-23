@@ -38,8 +38,9 @@ class DependencyTreeBuilder
     {
         $this->markAsSeen($dependency);
 
-        $handler = $this->handlerRegistry->getFileHandler($dependency->getFilePath());
-        $children = $handler->extractDependencies($dependency->getFilePath());
+        $handler = $this->handlerRegistry->getHandler($dependency);
+        $children = $handler->extractDependencies($dependency);
+
         $dependency->addAll($children);
 
         foreach ($children as $child) {
