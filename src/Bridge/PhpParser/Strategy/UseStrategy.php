@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
+use LambdaPackager\ClassDependency;
 use PhpParser\Node;
 
 class UseStrategy extends ClassStrategy
@@ -14,13 +15,13 @@ class UseStrategy extends ClassStrategy
         return $node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\GroupUse;
     }
 
-    public function extractFileNames(Node $node): array
+    public function extractDependencies(Node $node): array
     {
         if ($node instanceof Node\Stmt\Use_) {
             $className = $node->uses[0]->name->toString();
 
             if ($this->isProcessable($className)) {
-                return [$this->getClassFileName($className)];
+                return [ClassDependency::fromClassName($className)];
             }
         }
 
@@ -31,7 +32,7 @@ class UseStrategy extends ClassStrategy
                 $className = $prefix . '\\' . $use->name->toString();
 
                 return $this->isProcessable($className)
-                    ? $this->getClassFileName($className)
+                    ? ClassDependency::fromClassName($className)
                     : null;
             }, $node->uses));
         }

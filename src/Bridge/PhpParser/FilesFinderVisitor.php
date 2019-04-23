@@ -3,6 +3,7 @@
 namespace LambdaPackager\Bridge\PhpParser;
 
 use LambdaPackager\Bridge\PhpParser\Strategy;
+use LambdaPackager\Dependency;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -13,8 +14,8 @@ class FilesFinderVisitor extends NodeVisitorAbstract
     /** @var Strategy\Strategy[] */
     private $strategies = [];
 
-    /** @var string[] */
-    private $files = [];
+    /** @var Dependency[] */
+    private $dependencies = [];
 
     /** @var string */
     private $autoloadFailStrategy;
@@ -36,17 +37,12 @@ class FilesFinderVisitor extends NodeVisitorAbstract
 
     public function all(): array
     {
-        return $this->files;
+        return $this->dependencies;
     }
 
     public function beforeTraverse(array $nodes)
     {
-        $this->files = [];
-    }
-
-    public function afterTraverse(array $nodes)
-    {
-        $this->files = array_unique($this->files);
+        $this->dependencies = [];
     }
 
     public function enterNode(Node $node)
@@ -62,7 +58,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
         foreach ($this->strategies as $strategy) {
             try {
                 if ($strategy->supports($node)) {
-                    $this->files = array_merge($this->files, $strategy->extractFileNames($node));
+                    $this->dependencies = array_merge($this->dependencies, $strategy->extractDependencies($node));
                 }
             } catch (CouldNotAutoloadClassException $e) {
                 if ($this->autoloadFailStrategy === self::AUTOLOAD_FAIL_STRATEGY_SKIP) {

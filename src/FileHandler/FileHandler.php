@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
+use LambdaPackager\Dependency;
+
 interface FileHandler
 {
-    public function extractFileNames(string $fileName): array;
+    /** @return Dependency[] */
+    public function extractDependencies(string $fileName): array;
 }

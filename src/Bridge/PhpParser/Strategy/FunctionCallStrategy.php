@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
+use LambdaPackager\Dependency;
 use PhpParser\Node;
 use ReflectionFunction;
 
@@ -17,8 +18,13 @@ class FunctionCallStrategy implements Strategy
             && false === (new ReflectionFunction($node->toString()))->isInternal();
     }
 
-    public function extractFileNames(Node $node): array
+    /**
+     * @todo make a FunctionDependency object
+     */
+    public function extractDependencies(Node $node): array
     {
-        return [(new ReflectionFunction($node->toString()))->getFileName()];
+        $filePath = (new ReflectionFunction($node->toString()))->getFileName();
+
+        return [new Dependency($filePath)];
     }
 }

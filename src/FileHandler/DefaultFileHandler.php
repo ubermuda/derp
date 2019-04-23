@@ -6,7 +6,7 @@ namespace LambdaPackager\FileHandler;
 
 class DefaultFileHandler implements FileHandler
 {
-    public function extractFileNames(string $fileName): array
+    public function extractDependencies(string $fileName): array
     {
         return [$fileName];
     }

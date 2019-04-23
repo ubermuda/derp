@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
+use LambdaPackager\Dependency;
 use PhpParser\Node;
 
 interface Strategy
@@ -11,7 +12,7 @@ interface Strategy
     public function supports(Node $node): bool;
 
     /**
-     * @return string[]
+     * @return Dependency[]
      */
-    public function extractFileNames(Node $node): array;
+    public function extractDependencies(Node $node): array;
 }

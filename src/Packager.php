@@ -66,7 +66,7 @@ class Packager
 
         foreach ($this->manifest as $fileName) {
             $handler = $this->handlerRegistry->getFileHandler($fileName);
-            $files = array_merge($files, $handler->extractFileNames($fileName));
+            $files = array_merge($files, $handler->extractDependencies($fileName));
         }
 
         $files = array_merge($files, $autoload->extractFileNames());

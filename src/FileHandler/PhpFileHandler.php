@@ -6,13 +6,17 @@ namespace LambdaPackager\FileHandler;
 
 use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
+use LambdaPackager\ClassDependency;
+use LambdaPackager\Dependency;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use RuntimeException;
 
 class PhpFileHandler implements FileHandler
 {
-    /** @var \PhpParser\Parser */
+    /** @var Parser */
     private $parser;
 
     /** @var FilesFinderVisitor */
@@ -20,12 +24,6 @@ class PhpFileHandler implements FileHandler
 
     /** @var NodeTraverser */
     private $traverser;
-
-    /** @var string[] */
-    private $files = [];
-
-    /** @var string[] */
-    private $currentlyProcessingFileNames = [];
 
     public function __construct()
     {
@@ -39,45 +37,30 @@ class PhpFileHandler implements FileHandler
         $this->traverser = $traverser;
     }
 
-    public function extractFileNames(string $fileName): array
-    {
-        $this->files[] = $fileName;
-        $this->currentlyProcessingFileNames[] = $fileName;
-
-        $this->processFile($fileName);
-
-        $this->files = array_unique($this->files);
-        sort($this->files);
-
-        return $this->files;
-    }
-
-    private function processFile(string $fileName): void
+    public function extractDependencies(string $fileName): array
     {
         $stmts = $this->parser->parse(file_get_contents($fileName));
 
         try {
             $this->traverser->traverse($stmts);
         } catch (CouldNotProcessNodeException $e) {
-            throw new \RuntimeException(sprintf('Error while processing node in "%s" at line %d', $fileName, $e->getNode()->getStartLine()), 0, $e);
+            throw new RuntimeException(sprintf('Error while processing node in "%s" at line %d', $fileName, $e->getNode()->getStartLine()), 0, $e);
         }
 
-        foreach ($this->visitor->all() as $foundFileName) {
-            if ($this->fileNeedsProcessing($foundFileName)) {
-                array_push($this->currentlyProcessingFileNames, $foundFileName);
-                $this->processFile($foundFileName);
-            }
-
-            if (count($this->currentlyProcessingFileNames) > 0) {
-                array_push($this->files, array_pop($this->currentlyProcessingFileNames));
-            }
-        }
+        return $this->getUniqueDependencies($this->visitor->all());
     }
 
-    private function fileNeedsProcessing(string $fileName): bool
+    /**
+     * @param Dependency[] $dependencies
+     */
+    private function getUniqueDependencies(array $dependencies): array
     {
-        return
-               false === array_search($fileName, $this->files)
-            && false === array_search($fileName, $this->currentlyProcessingFileNames);
+        $uniqueDependencies = [];
+
+        foreach ($dependencies as $dependency) {
+            $uniqueDependencies[$dependency->getFilePath()] = $dependency;
+        }
+
+        return array_values($uniqueDependencies);
     }
 }

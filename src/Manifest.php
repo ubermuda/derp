@@ -7,9 +7,14 @@ namespace LambdaPackager;
 use ArrayIterator;
 use Iterator;
 use IteratorAggregate;
+use LambdaPackager\Autoload\Autoload;
+use LambdaPackager\Autoload\AutoloadFactory;
 
 class Manifest implements IteratorAggregate
 {
+    /** @var string */
+    private $baseName;
+
     /** @var string */
     private $projectRoot;
 
@@ -21,6 +26,7 @@ class Manifest implements IteratorAggregate
 
     public function __construct(string $path)
     {
+        $this->baseName = basename($path);
         $this->projectRoot = dirname($path);
 
         $manifest = json_decode(file_get_contents($path), true);
@@ -37,6 +43,11 @@ class Manifest implements IteratorAggregate
         }
     }
 
+    public function getManifestPath(): string
+    {
+        return $this->projectRoot.'/'.$this->baseName;
+    }
+
     public function getProjectRoot(): string
     {
         return $this->projectRoot;
@@ -45,6 +56,11 @@ class Manifest implements IteratorAggregate
     public function getAutoload(): string
     {
         return $this->autoload;
+    }
+
+    public function getAutoloadManager(): Autoload
+    {
+        return (new AutoloadFactory())->createForManifest($this);
     }
 
     public function getIterator(): Iterator

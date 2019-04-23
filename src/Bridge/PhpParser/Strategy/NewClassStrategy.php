@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
+use LambdaPackager\ClassDependency;
 use PhpParser\Node;
 
 class NewClassStrategy extends ClassStrategy
@@ -16,8 +17,8 @@ class NewClassStrategy extends ClassStrategy
             && $this->isProcessable($node->class->toString());
     }
 
-    public function extractFileNames(Node $node): array
+    public function extractDependencies(Node $node): array
     {
-        return [$this->getClassFileName($node->class->toString())];
+        return [ClassDependency::fromClassName($node->class->toString())];
     }
 }
