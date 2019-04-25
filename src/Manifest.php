@@ -21,11 +21,16 @@ class Manifest implements IteratorAggregate
     /** @var string[] */
     private $include;
 
+    /** @var string[] */
+    private $excludeClass;
+
     /** @var string */
     private $autoload;
 
     public function __construct(string $path)
     {
+        $path = realpath($path);
+
         $this->baseName = basename($path);
         $this->projectRoot = dirname($path);
 
@@ -39,7 +44,12 @@ class Manifest implements IteratorAggregate
             $resolvedIncludes = $this->resolveGlob($absolutePathInclude);
 
             $this->include = array_merge($this->include, $resolvedIncludes);
+        }
 
+        $this->excludeClass = [];
+
+        if (isset($manifest['exclude-class'])) {
+            $this->excludeClass = $manifest['exclude-class'];
         }
     }
 
@@ -75,6 +85,17 @@ class Manifest implements IteratorAggregate
         }
 
         return $fileName;
+    }
+
+    public function hasExcludeClass(string $className): bool
+    {
+        foreach ($this->excludeClass as $pattern) {
+            if (fnmatch($pattern, $className, FNM_NOESCAPE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function resolveGlob(string $fileName): array

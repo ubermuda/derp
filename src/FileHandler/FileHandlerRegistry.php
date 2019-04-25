@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LambdaPackager\FileHandler;
 
 use LambdaPackager\Dependency;
+use LambdaPackager\Manifest;
 
 class FileHandlerRegistry
 {
@@ -14,10 +15,10 @@ class FileHandlerRegistry
     /** @var FileHandler */
     private $defaultHandler;
 
-    public function __construct()
+    public function __construct(Manifest $manifest)
     {
         $this->handlers = [
-            'php' => new PhpFileHandler(),
+            'php' => new PhpFileHandler($manifest),
         ];
 
         $this->defaultHandler = new DefaultFileHandler();

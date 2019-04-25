@@ -11,8 +11,6 @@ interface Strategy
 {
     public function supports(Node $node): bool;
 
-    /**
-     * @return Dependency[]
-     */
+    /** @return Dependency[] */
     public function extractDependencies(Node $node): array;
 }

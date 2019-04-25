@@ -6,18 +6,27 @@ namespace LambdaPackager;
 
 use ArrayIterator;
 use IteratorAggregate;
+use RuntimeException;
 
 class Dependency implements IteratorAggregate
 {
+    /** @var Dependency|null */
+    private $parent;
+
     /** @var self[] */
     private $children = [];
 
     /** @var string */
     private $filePath;
 
-    public function __construct(string $filePath)
+    public function __construct(string $filePath, ?Dependency $parent = null)
     {
         $this->filePath = realpath($filePath);
+        $this->parent = $parent;
+
+        if (null !== $parent) {
+            $parent->add($this);
+        }
     }
 
     public function getFilePath(): string
@@ -25,12 +34,31 @@ class Dependency implements IteratorAggregate
         return $this->filePath;
     }
 
+    public function isRoot(): bool
+    {
+        return null === $this->parent;
+    }
+
+    public function setParent(Dependency $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /** @throws RuntimeException */
+    public function getParent(): Dependency
+    {
+        if ($this->isRoot()) {
+            throw new RuntimeException('Cannot get parent of a root node');
+        }
+
+        return $this->parent;
+    }
+
     public function createChild(string $filePath): Dependency
     {
-        $child = new self($filePath);
-        $this->add($child);
-
-        return $child;
+        return new self($filePath, $this);
     }
 
     /** @return Dependency[] */
@@ -41,6 +69,8 @@ class Dependency implements IteratorAggregate
 
     public function add(self $child): self
     {
+        $child->setParent($this);
+
         $this->children[] = $child;
 
         return $this;
@@ -54,6 +84,22 @@ class Dependency implements IteratorAggregate
         }
 
         return $this;
+    }
+
+    /** @return Dependency[] */
+    public function findInChildren(string $pattern): array
+    {
+        $results = [];
+
+        foreach ($this->children as $child) {
+            if (fnmatch($pattern, $child->getFilePath())) {
+                $results[] = $child;
+            }
+
+            $results = array_merge($results, $child->findInChildren($pattern));
+        }
+
+        return $results;
     }
 
     public function getIterator(): ArrayIterator

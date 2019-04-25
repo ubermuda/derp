@@ -8,6 +8,7 @@ use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
 use LambdaPackager\ClassDependency;
 use LambdaPackager\Dependency;
+use LambdaPackager\Manifest;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
@@ -25,16 +26,20 @@ class PhpFileHandler implements FileHandler
     /** @var NodeTraverser */
     private $traverser;
 
-    public function __construct()
+    /** @var Manifest */
+    private $manifest;
+
+    public function __construct(Manifest $manifest)
     {
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $this->visitor = new FilesFinderVisitor();
+        $this->visitor = new FilesFinderVisitor($manifest);
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor($this->visitor);
 
         $this->traverser = $traverser;
+        $this->manifest = $manifest;
     }
 
     public function extractDependencies(Dependency $dependency): array

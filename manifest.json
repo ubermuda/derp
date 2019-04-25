@@ -1,6 +1,10 @@
 {
     "include": [
-        "bin/package.php"
+        "bin/console.php"
+    ],
+
+    "exclude-class": [
+        "Symfony\\Component\\Console\\Event\\Console*Event"
     ],
 
     "autoload": "composer"

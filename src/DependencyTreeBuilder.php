@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager;
 
+use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\FileHandler\FileHandlerRegistry;
 
 class DependencyTreeBuilder
@@ -17,7 +18,12 @@ class DependencyTreeBuilder
     public function __construct(Manifest $manifest)
     {
         $this->manifest = $manifest;
-        $this->handlerRegistry = new FileHandlerRegistry();
+        $this->handlerRegistry = new FileHandlerRegistry($manifest);
+    }
+
+    public static function buildFromManifestPath(string $manifestPath): Dependency
+    {
+        return (new self(new Manifest($manifestPath)))->build();
     }
 
     public function build(): Dependency
@@ -25,6 +31,9 @@ class DependencyTreeBuilder
         $this->manifest->getAutoloadManager()->initialize();
 
         $root = new Dependency($this->manifest->getManifestPath());
+
+        $autoload = (new AutoloadFactory())->createForManifest($this->manifest);
+        $root->addAll($autoload->extractDependencies());
 
         foreach ($this->manifest as $filePath) {
 //            echo '>>> Processing manifest dependency '.$filePath.PHP_EOL;

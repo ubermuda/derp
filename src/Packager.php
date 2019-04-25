@@ -7,7 +7,6 @@ namespace LambdaPackager;
 use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\Extension\Extension;
 use LambdaPackager\Extension\ManifestAwareExtension;
-use LambdaPackager\FileHandler\FileHandlerRegistry;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -28,9 +27,6 @@ class Packager
     /** @var Filesystem */
     private $fs;
 
-    /** @var FileHandlerRegistry */
-    private $handlerRegistry;
-
     public function __construct(string $manifestPath, string $buildDir, Extension $extension)
     {
         $this->manifest = new Manifest(realpath($manifestPath));
@@ -48,7 +44,6 @@ class Packager
 
         $this->extension = $extension;
         $this->fs = new Filesystem();
-        $this->handlerRegistry = new FileHandlerRegistry();
     }
 
     public function package(): void
@@ -62,15 +57,17 @@ class Packager
         $autoload = (new AutoloadFactory())->createForManifest($this->manifest);
         $autoload->initialize();
 
+        $root = (new DependencyTreeBuilder($this->manifest))->build();
         $files = [];
 
-        foreach ($this->manifest as $fileName) {
-            $handler = $this->handlerRegistry->getHandler($fileName);
-            $files = array_merge($files, $handler->extractDependencies($fileName));
+        /** @var Dependency $dependency */
+        foreach (new RecursiveDependencyIterator($root) as $dependency) {
+            $files[$dependency->getFilePath()] = true;
         }
 
-        $files = array_merge($files, $autoload->extractFileNames());
+        unset($files[$this->manifest->getManifestPath()]);
 
+        $files = array_keys($files);
         $files = $this->extension->beforeCopy($files);
 
         $this->copy($files);
