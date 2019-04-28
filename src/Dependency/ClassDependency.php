@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Dependency;
+namespace Derp\Dependency;
 
 use ReflectionClass;
 

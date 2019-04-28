@@ -1,10 +1,10 @@
 <?php
 
-namespace LambdaPackager\Bridge\PhpParser;
+namespace Derp\Bridge\PhpParser;
 
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Manifest;
-use LambdaPackager\ManifestAware;
+use Derp\Dependency\FileDependency;
+use Derp\Manifest;
+use Derp\ManifestAware;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 

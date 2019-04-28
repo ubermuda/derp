@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace Derp;
 
 trait ManifestAwareTrait
 {

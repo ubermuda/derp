@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Autoload;
+namespace Derp\Autoload;
 
-use LambdaPackager\Manifest;
+use Derp\Manifest;
 
 /**
  * Creates Autoload handlers.

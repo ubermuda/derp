@@ -1,5 +1,5 @@
 {
-    "name": "ubermuda/lambda-packager",
+    "name": "ubermuda/derp",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "LambdaPackager\\": "./src"
+            "Derp\\": "./src"
         }
     }
 }

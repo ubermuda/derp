@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\PhpParser\Strategy;
+namespace Derp\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\Dependency\ClassDependency;
+use Derp\Dependency\ClassDependency;
 use PhpParser\Node;
 
 class ExtendsStrategy extends ClassStrategy

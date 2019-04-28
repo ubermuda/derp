@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\PhpParser;
+namespace Derp\Bridge\PhpParser;
 
 /**
  * Thrown when a class could not be autoload.

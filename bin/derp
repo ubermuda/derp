@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use LambdaPackager\Bridge\Silly;
+use Derp\Bridge\Silly;
 use Silly\Application;
 
 require_once __DIR__.'/../vendor/autoload.php';

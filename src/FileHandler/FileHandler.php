@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\FileHandler;
+namespace Derp\FileHandler;
 
-use LambdaPackager\Dependency\FileDependency;
+use Derp\Dependency\FileDependency;
 
 interface FileHandler
 {

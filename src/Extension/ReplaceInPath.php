@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Extension;
+namespace Derp\Extension;
 
-use LambdaPackager\ManifestAware;
-use LambdaPackager\ManifestAwareTrait;
+use Derp\ManifestAware;
+use Derp\ManifestAwareTrait;
 use RuntimeException;
 
 class ReplaceInPath implements Extension, ManifestAware

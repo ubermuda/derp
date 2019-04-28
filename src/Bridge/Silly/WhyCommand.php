@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\Silly;
+namespace Derp\Bridge\Silly;
 
-use LambdaPackager\Dependency\DependencyTreeBuilder;
-use LambdaPackager\Manifest;
-use LambdaPackager\Tree\Node;
+use Derp\Dependency\DependencyTreeBuilder;
+use Derp\Manifest;
+use Derp\Tree\Node;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class WhyCommand

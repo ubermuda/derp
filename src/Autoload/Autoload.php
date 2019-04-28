@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Autoload;
+namespace Derp\Autoload;
 
-use LambdaPackager\Tree\Node;
+use Derp\Tree\Node;
 
 /**
  * Handles a particular Autoload strategy.

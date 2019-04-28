@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\PhpParser\Strategy;
+namespace Derp\Bridge\PhpParser\Strategy;
 
 use PhpParser\Node;
 

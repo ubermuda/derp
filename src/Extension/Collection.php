@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Extension;
+namespace Derp\Extension;
 
-use LambdaPackager\Manifest;
-use LambdaPackager\ManifestAware;
+use Derp\Manifest;
+use Derp\ManifestAware;
 
 class Collection implements Extension, ManifestAware
 {

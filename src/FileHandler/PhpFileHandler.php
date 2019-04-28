@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\FileHandler;
+namespace Derp\FileHandler;
 
-use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
-use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Manifest;
+use Derp\Bridge\PhpParser\CouldNotProcessNodeException;
+use Derp\Bridge\PhpParser\FilesFinderVisitor;
+use Derp\Dependency\FileDependency;
+use Derp\Manifest;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;

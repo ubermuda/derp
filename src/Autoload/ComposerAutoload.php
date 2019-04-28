@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Autoload;
+namespace Derp\Autoload;
 
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Tree\Node;
-use LambdaPackager\Manifest;
+use Derp\Dependency\FileDependency;
+use Derp\Tree\Node;
+use Derp\Manifest;
 
 class ComposerAutoload implements Autoload
 {

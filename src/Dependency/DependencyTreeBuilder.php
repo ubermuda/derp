@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Dependency;
+namespace Derp\Dependency;
 
-use LambdaPackager\Autoload\AutoloadFactory;
-use LambdaPackager\FileHandler\FileHandlerRegistry;
-use LambdaPackager\Manifest;
-use LambdaPackager\Tree\Node;
+use Derp\Autoload\AutoloadFactory;
+use Derp\FileHandler\FileHandlerRegistry;
+use Derp\Manifest;
+use Derp\Tree\Node;
 
 class DependencyTreeBuilder
 {

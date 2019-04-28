@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace Derp;
 
 use ArrayIterator;
 use Iterator;
 use IteratorAggregate;
-use LambdaPackager\Autoload\Autoload;
-use LambdaPackager\Autoload\AutoloadFactory;
+use Derp\Autoload\Autoload;
+use Derp\Autoload\AutoloadFactory;
 
 class Manifest implements IteratorAggregate
 {

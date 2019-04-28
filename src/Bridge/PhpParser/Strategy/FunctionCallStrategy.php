@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\PhpParser\Strategy;
+namespace Derp\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\Dependency\FileDependency;
+use Derp\Dependency\FileDependency;
 use PhpParser\Node;
 use ReflectionFunction;
 

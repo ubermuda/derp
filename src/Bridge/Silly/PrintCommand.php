@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\Silly;
+namespace Derp\Bridge\Silly;
 
-use LambdaPackager\Dependency\DependencyTreeBuilder;
-use LambdaPackager\Tree\Node;
-use LambdaPackager\Tree\RecursiveTreeIterator;
+use Derp\Dependency\DependencyTreeBuilder;
+use Derp\Tree\Node;
+use Derp\Tree\RecursiveTreeIterator;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PrintCommand

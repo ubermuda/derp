@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Dependency;
+namespace Derp\Dependency;
 
-use LambdaPackager\Tree\Node;
+use Derp\Tree\Node;
 
 class FileDependency extends Node
 {

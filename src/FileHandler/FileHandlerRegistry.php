@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\FileHandler;
+namespace Derp\FileHandler;
 
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Manifest;
+use Derp\Dependency\FileDependency;
+use Derp\Manifest;
 
 class FileHandlerRegistry
 {

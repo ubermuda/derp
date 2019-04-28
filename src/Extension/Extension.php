@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Extension;
+namespace Derp\Extension;
 
 interface Extension
 {

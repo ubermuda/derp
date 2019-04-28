@@ -4,9 +4,9 @@
 declare(strict_types=1);
 
 use Alom\Graphviz\Digraph;
-use LambdaPackager\Tree\Node;
-use LambdaPackager\Dependency\DependencyTreeBuilder;
-use LambdaPackager\Manifest;
+use Derp\Tree\Node;
+use Derp\Dependency\DependencyTreeBuilder;
+use Derp\Manifest;
 
 require_once __DIR__.'/../vendor/autoload.php';
 

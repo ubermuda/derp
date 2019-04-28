@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\Silly;
+namespace Derp\Bridge\Silly;
 
-use LambdaPackager\Extension\Collection;
-use LambdaPackager\Extension\ReplaceInPath;
-use LambdaPackager\Packager;
+use Derp\Extension\Collection;
+use Derp\Extension\ReplaceInPath;
+use Derp\Packager;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PackageCommand

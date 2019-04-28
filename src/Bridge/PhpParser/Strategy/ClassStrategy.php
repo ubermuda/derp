@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Bridge\PhpParser\Strategy;
+namespace Derp\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\Bridge\PhpParser\CouldNotAutoloadClassException;
-use LambdaPackager\ManifestAware;
-use LambdaPackager\ManifestAwareTrait;
+use Derp\Bridge\PhpParser\CouldNotAutoloadClassException;
+use Derp\ManifestAware;
+use Derp\ManifestAwareTrait;
 use ReflectionClass;
 
 abstract class ClassStrategy implements Strategy, ManifestAware

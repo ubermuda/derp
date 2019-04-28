@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace Derp;
 
-use LambdaPackager\Autoload\AutoloadFactory;
-use LambdaPackager\Dependency\DependencyTreeBuilder;
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Extension\Extension;
-use LambdaPackager\Tree\RecursiveTreeIterator;
+use Derp\Autoload\AutoloadFactory;
+use Derp\Dependency\DependencyTreeBuilder;
+use Derp\Dependency\FileDependency;
+use Derp\Extension\Extension;
+use Derp\Tree\RecursiveTreeIterator;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 

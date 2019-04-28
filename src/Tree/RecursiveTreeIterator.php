@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Tree;
+namespace Derp\Tree;
 
 use RecursiveIteratorIterator;
 
