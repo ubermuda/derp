@@ -51,7 +51,7 @@ So for example, if your app's entry point is `index.php`, your manifest will loo
 }
 ```
 
-You can also exclude files with the `exclude` setting (like for `include`, globing is supported).
+You can also exclude classes with the `exclude-class` setting (like for `include`, globing is supported). It is useful when a class cannot be autoload because a dependency is missing (happens for example if your app has non-mandatory features based on what's installed and what's not). See this repository's `manifest.json` for an example.
 
 Then, run the tool:
 
