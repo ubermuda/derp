@@ -24,7 +24,7 @@ abstract class ClassStrategy implements Strategy, ManifestAware
             return false;
         }
 
-        if (!(class_exists($className) || interface_exists($className))) {
+        if (!(class_exists($className) || trait_exists($className) || interface_exists($className))) {
             throw new CouldNotAutoloadClassException($className);
         }
 
