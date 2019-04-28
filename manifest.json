@@ -1,6 +1,6 @@
 {
     "include": [
-        "bin/console.php"
+        "bin/derp"
     ],
 
     "exclude-class": [

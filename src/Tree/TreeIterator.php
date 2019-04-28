@@ -26,6 +26,6 @@ class TreeIterator extends ArrayIterator implements RecursiveIterator
 
     public function getChildren()
     {
-        return new self($this->current());
+        return new static($this->current());
     }
 }

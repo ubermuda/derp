@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
-use LambdaPackager\Tree\Node;
+use LambdaPackager\Dependency\FileDependency;
 use LambdaPackager\Manifest;
 
 class FileHandlerRegistry
@@ -12,22 +12,20 @@ class FileHandlerRegistry
     /** @var FileHandler[] */
     private $handlers;
 
-    /** @var FileHandler */
-    private $defaultHandler;
-
     public function __construct(Manifest $manifest)
     {
         $this->handlers = [
-            'php' => new PhpFileHandler($manifest),
+            new PhpFileHandler($manifest),
+            new DefaultFileHandler(),
         ];
-
-        $this->defaultHandler = new DefaultFileHandler();
     }
 
-    public function getHandler(Node $dependency): FileHandler
+    public function getHandler(FileDependency $dependency): FileHandler
     {
-        $extension = pathinfo($dependency->getValue(), PATHINFO_EXTENSION);
-
-        return $this->handlers[$extension] ?? $this->defaultHandler;
+        foreach ($this->handlers as $handler) {
+            if ($handler->supports($dependency)) {
+                return $handler;
+            }
+        }
     }
 }

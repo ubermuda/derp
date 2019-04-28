@@ -6,8 +6,8 @@ namespace LambdaPackager;
 
 use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\Dependency\DependencyTreeBuilder;
+use LambdaPackager\Dependency\FileDependency;
 use LambdaPackager\Extension\Extension;
-use LambdaPackager\Tree\Node;
 use LambdaPackager\Tree\RecursiveTreeIterator;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -62,9 +62,9 @@ class Packager
         $root = (new DependencyTreeBuilder($this->manifest))->build();
         $files = [];
 
-        /** @var Node $dependency */
+        /** @var FileDependency $dependency */
         foreach (new RecursiveTreeIterator($root) as $dependency) {
-            $files[$dependency->getValue()] = true;
+            $files[$dependency->getFilePath()] = true;
         }
 
         unset($files[$this->manifest->getManifestPath()]);

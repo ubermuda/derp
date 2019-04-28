@@ -28,11 +28,11 @@ class DependencyTreeBuilder
         return (new self(new Manifest($manifestPath)))->build();
     }
 
-    public function build(): Node
+    public function build(): FileDependency
     {
         $this->manifest->getAutoloadManager()->initialize();
 
-        $root = new Node($this->manifest->getManifestPath());
+        $root = new FileDependency($this->manifest->getManifestPath());
 
         $autoload = (new AutoloadFactory())->createForManifest($this->manifest);
         $root->addAll($autoload->extractDependencies());
@@ -44,7 +44,7 @@ class DependencyTreeBuilder
         return $root;
     }
 
-    private function processDependency(Node $dependency)
+    private function processDependency(FileDependency $dependency)
     {
         $this->markAsSeen($dependency);
 
@@ -60,12 +60,12 @@ class DependencyTreeBuilder
         }
     }
 
-    private function markAsSeen(Node $dependency)
+    private function markAsSeen(FileDependency $dependency)
     {
-        $this->seenFilePaths[$dependency->getValue()] = true;
+        $this->seenFilePaths[$dependency->getFilePath()] = true;
     }
 
-    private function isCircularDependency(Node $dependency): bool
+    private function isCircularDependency(FileDependency $dependency): bool
     {
         return isset($this->seenFilePaths[$dependency->getValue()]);
     }

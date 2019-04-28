@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
-use LambdaPackager\Tree\Node;
+use LambdaPackager\Dependency\FileDependency;
 
 class DefaultFileHandler implements FileHandler
 {
-    public function extractDependencies(Node $dependency): array
+    public function extractDependencies(FileDependency $dependency): array
     {
-        return [$dependency->getValue()];
+        return [];
+    }
+
+    public function supports(FileDependency $dependency): bool
+    {
+        return true;
     }
 }
