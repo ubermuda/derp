@@ -6,7 +6,6 @@ namespace LambdaPackager\FileHandler;
 
 use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
-use LambdaPackager\Dependency\ClassDependency;
 use LambdaPackager\Tree\Node;
 use LambdaPackager\Manifest;
 use PhpParser\NodeTraverser;

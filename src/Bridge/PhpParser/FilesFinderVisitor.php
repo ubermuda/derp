@@ -2,7 +2,6 @@
 
 namespace LambdaPackager\Bridge\PhpParser;
 
-use LambdaPackager\Bridge\PhpParser\Strategy;
 use LambdaPackager\Dependency\FileDependency;
 use LambdaPackager\Manifest;
 use LambdaPackager\ManifestAware;
@@ -83,7 +82,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
-        /**
+        /*
          * @todo handle the following use-cases:
          *
          * - FQCN in docblocks
@@ -97,7 +96,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
                     $this->addAll($strategy->extractDependencies($node));
                 }
             } catch (CouldNotAutoloadClassException $e) {
-                if ($this->autoloadFailStrategy === self::AUTOLOAD_FAIL_STRATEGY_SKIP) {
+                if (self::AUTOLOAD_FAIL_STRATEGY_SKIP === $this->autoloadFailStrategy) {
                     continue;
                 }
 

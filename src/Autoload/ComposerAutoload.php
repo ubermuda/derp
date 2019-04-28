@@ -32,7 +32,7 @@ class ComposerAutoload implements Autoload
             $root->createChild($filePath);
         }
 
-        $autoloadFilesDependencies = $root->filterChildren(function(FileDependency $dependency) {
+        $autoloadFilesDependencies = $root->filterChildren(function (FileDependency $dependency) {
             return $dependency->getValue() === $this->projectRoot.'/vendor/composer/autoload_files.php';
         });
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
 use LambdaPackager\Dependency\ClassDependency;
-use LambdaPackager\Dependency\FileDependency;
 use PhpParser\Node;
 
 class ClassConstantStrategy extends ClassStrategy

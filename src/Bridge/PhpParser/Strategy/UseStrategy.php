@@ -9,7 +9,6 @@ use PhpParser\Node;
 
 class UseStrategy extends ClassStrategy
 {
-
     public function supports(Node $node): bool
     {
         return $node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\GroupUse;
@@ -29,7 +28,7 @@ class UseStrategy extends ClassStrategy
             $prefix = $node->prefix->toString();
 
             return array_filter(array_map(function (Node\Stmt\UseUse $use) use ($prefix) {
-                $className = $prefix . '\\' . $use->name->toString();
+                $className = $prefix.'\\'.$use->name->toString();
 
                 return $this->isProcessable($className)
                     ? ClassDependency::fromClassName($className)

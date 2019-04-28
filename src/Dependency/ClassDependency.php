@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Dependency;
 
-use LambdaPackager\Dependency\FileDependency;
-use LambdaPackager\Tree\Node;
 use ReflectionClass;
 
 class ClassDependency extends FileDependency
 {
     private $className;
 
-    public function __construct(string $filePath, string $className, ?Node $parent = null)
+    public function __construct(string $filePath, string $className, ?FileDependency $parent = null)
     {
         $this->className = $className;
 
@@ -24,7 +22,7 @@ class ClassDependency extends FileDependency
         return $this->className;
     }
 
-    public static function fromClassName(string $className, ?Node $parent = null): self
+    public static function fromClassName(string $className, ?FileDependency $parent = null): self
     {
         $filePath = (new ReflectionClass($className))->getFileName();
 

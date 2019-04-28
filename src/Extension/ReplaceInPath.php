@@ -24,7 +24,7 @@ class ReplaceInPath implements Extension, ManifestAware
     {
         $replacements = $this->resolveReplacementsParameters($this->replacements);
 
-        return array_map(function(string $fileName) use($replacements) {
+        return array_map(function (string $fileName) use ($replacements) {
             foreach ($replacements as $search => $replace) {
                 if (false !== strpos($fileName, $search)) {
                     $fileName = str_replace($search, $replace, $fileName);

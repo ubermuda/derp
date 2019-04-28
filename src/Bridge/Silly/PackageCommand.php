@@ -14,7 +14,7 @@ class PackageCommand
     public function __invoke(string $manifest, string $target, OutputInterface $output)
     {
         $extension = new Collection([
-            new ReplaceInPath([realpath(__DIR__.'/..') => '%manifest.project_root%'])
+            new ReplaceInPath([realpath(__DIR__.'/..') => '%manifest.project_root%']),
         ]);
 
         $packager = new Packager($manifest, $target, $extension);

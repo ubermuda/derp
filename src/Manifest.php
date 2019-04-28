@@ -80,7 +80,7 @@ class Manifest implements IteratorAggregate
 
     private function getAbsolutePath(string $fileName): string
     {
-        if (substr($fileName, 0, 1) !== '/') {
+        if ('/' !== substr($fileName, 0, 1)) {
             $fileName = $this->projectRoot.'/'.$fileName;
         }
 

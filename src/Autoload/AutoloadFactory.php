@@ -13,7 +13,7 @@ class AutoloadFactory
 {
     public function createForManifest(Manifest $manifest): Autoload
     {
-        if ($manifest->getAutoload() === 'composer') {
+        if ('composer' === $manifest->getAutoload()) {
             return new ComposerAutoload($manifest);
         }
 

@@ -16,11 +16,11 @@ class WhyCommand
         $manifest = new Manifest($manifest);
         $root = (new DependencyTreeBuilder($manifest))->build();
 
-        $deps = $root->filterChildren(function(Node $node) use ($pattern) {
+        $deps = $root->filterChildren(function (Node $node) use ($pattern) {
             return fnmatch($pattern, $node->getValue());
         });
 
-        if (count($deps) === 0) {
+        if (0 === count($deps)) {
             $io->error('No occurrences found.');
 
             return 1;

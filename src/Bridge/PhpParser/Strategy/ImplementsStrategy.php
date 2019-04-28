@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
 use LambdaPackager\Dependency\ClassDependency;
-use LambdaPackager\Dependency\FileDependency;
 use PhpParser\Node;
 
 class ImplementsStrategy extends ClassStrategy
@@ -19,7 +18,7 @@ class ImplementsStrategy extends ClassStrategy
 
     public function extractDependencies(Node $node): array
     {
-        return array_filter(array_map(function(Node\Name\FullyQualified $node) {
+        return array_filter(array_map(function (Node\Name\FullyQualified $node) {
             return $this->isProcessable($node->toString())
                 ? ClassDependency::fromClassName($node->toString())
                 : null;

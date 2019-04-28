@@ -2,3 +2,4 @@
 build/
 vendor/
 inspect.php
+.php_cs.cache

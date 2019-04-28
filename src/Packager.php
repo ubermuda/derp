@@ -7,7 +7,6 @@ namespace LambdaPackager;
 use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\Dependency\DependencyTreeBuilder;
 use LambdaPackager\Extension\Extension;
-use LambdaPackager\ManifestAware;
 use LambdaPackager\Tree\Node;
 use LambdaPackager\Tree\RecursiveTreeIterator;
 use RuntimeException;
@@ -92,11 +91,11 @@ class Packager
 
     private function getRelativePath(string $absolutePath): string
     {
-        if (substr($absolutePath, 0, 1) !== '/') {
+        if ('/' !== substr($absolutePath, 0, 1)) {
             throw new RuntimeException(sprintf('Cannot determine relative project path from a relative path "%s"', $absolutePath));
         }
 
-        if (substr_count($absolutePath, $this->projectRoot) !== 1) {
+        if (1 !== substr_count($absolutePath, $this->projectRoot)) {
             throw new RuntimeException(sprintf('File does not seem to be inside current project (file: "%s", project: "%s"', $absolutePath, $this->projectRoot));
         }
 
