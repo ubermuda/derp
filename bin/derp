@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use LambdaPackager\Bridge\Silly;
+use Silly\Application;
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+$app = new Application();
+$app
+    ->command('print manifest', new Silly\PrintCommand())
+    ->descriptions('Prints all the files required by the app', [
+        'manifest' => 'The app\'s manifest file path',
+    ]);
+
+$app
+    ->command('why manifest pattern [--absolute]', new Silly\WhyCommand())
+    ->descriptions('Finds a file and tells you why it\'s required', [
+        'manifest' => 'The app\'s manifest file path',
+        'pattern' => 'What you are looking for (supports globing)',
+        '--absolute' => 'Show absolute file paths instead of relative ones',
+    ]);
+
+$app
+    ->command('package manifest target', new Silly\PackageCommand())
+    ->descriptions('Packages your application with only the required files', [
+        'manifest' => 'The app\'s manifest file path',
+        'target' => 'The target build directory (will be deleted if exists)',
+    ]);
+
+$app->run();

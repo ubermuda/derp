@@ -8,15 +8,14 @@ use LambdaPackager\Tree\Node;
 use LambdaPackager\Dependency\DependencyTreeBuilder;
 use LambdaPackager\Manifest;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-$manifestPath = $argv[1] ?? __DIR__ . '/../manifest.json';
+$manifestPath = $argv[1] ?? __DIR__.'/../manifest.json';
 
 $builder = new DependencyTreeBuilder(new Manifest($manifestPath));
 $root = $builder->build();
 
-$graph = new class
-{
+$graph = new class() {
     private $graph;
 
     public function __construct()

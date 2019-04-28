@@ -1,6 +1,6 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()->in('src');
+$finder = PhpCsFixer\Finder::create()->in(['src', 'bin']);
 
 return PhpCsFixer\Config::create()
     ->setRules([

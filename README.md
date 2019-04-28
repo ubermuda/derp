@@ -1,22 +1,22 @@
-# Lambda Packager
+# Derp
 
-An experiment on reducing the size of AWS Lambda packages.
+An experiment on exploring an application's required files.
 
-This will parse your code (using `nikic/php-parser`) and try to detect every PHP file that is needed to make your lambda run.
+This will parse your code (using `nikic/php-parser`) and try to detect every PHP file that is needed to make your app run.
 
-**Please note**: that this is only a POC and that there ARE bugs (I don't know what bugs, but it's 100% guaranteed that they exist).
+**Please note**: this is only a POC and there ARE bugs (I don't know what bugs, but it's 100% guaranteed that they exist).
 
 ## Is this useful?
 
-I don't really know, you tell me.
+I don't really know, you tell me. It started as an experiment to reduce AWS Lambda packages size. Since size (kinda) is a factor, I wanted to see how far we could go in reducing an app's footprint.  
 
 Right now, using this to package itself, here are the resulting packages sizes:
 
 ```console
-3.3M    LambdaPackager
-937K    LambdaPackager-packaged
-724K    LambdaPackager.zip
-208K    LambdaPackager-packaged.zip
+3.3M    Derp
+937K    Derp-packaged
+724K    Derp.zip
+208K    Derp-packaged.zip
 ```
 
 (Not sure if the zip files size is relevant, including it just in case)
@@ -24,8 +24,8 @@ Right now, using this to package itself, here are the resulting packages sizes:
 And number of files:
 
 ```console
-696     LambdaPackager
-218     LambdaPackager-packaged
+696     Derp
+218     Derp-packaged
 ```
 
 (Pretty sure number of files is totally irrelevant :p)
@@ -35,15 +35,15 @@ And number of files:
 Clone this repository somewhere:
 
 ```console
-git clone https://github.com/ubermuda/lambda-packager.git
+git clone https://github.com/ubermuda/derp.git
 ```
 
-Create a `manifest.json` file in your lambda's root directory. This file must contain a valid JSON valid object with the following keys:
+Create a `manifest.json` file in your app's root directory. This file must contain a valid JSON valid object with the following keys:
 
-- `include`, the files that the tool should parse (generally, your lambda's `index.php`)
-- `autoload`, your autoloading strategy (right now, only `composer` is supported)
+- `include` (mandatory), the files that the tool should parse (generally, your app's `index.php`). Supports globing (through `fname`).
+- `autoload` (mandatory), your autoloading strategy (right now, only `composer` is supported)
 
-So for example, if your lambda entry point is `index.php`, your manifest will look something like this:
+So for example, if your app's entry point is `index.php`, your manifest will look something like this:
 
 ```json
 {
@@ -55,14 +55,19 @@ So for example, if your lambda entry point is `index.php`, your manifest will lo
 }
 ```
 
+You can also exclude files with the `exclude` setting (like for `include`, globing is supported).
+
 Then, run the tool:
 
 ```console
-$ php bin/package ../my-lambda/manifest.json
+$ php bin/derp ../my-app/manifest.json print
 ```
 
-By default, the tool will package your lambda in a `build/` directory located in your project's root, but you can pass a custom build directory to the script:
+This will list the files required to run your application.
 
-```console
-$ php bin/package ../my-lambda/manifest.json /tmp/build
-```
+Having just that raw list is not really useful, so Derp comes with some other commands:
+
+- `why`, shows you why a certain file is required
+- `package`, packages your application with only the required files
+
+Run `php bin/derp` for more information.
