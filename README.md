@@ -13,22 +13,18 @@ I don't really know, you tell me. It started as an experiment to reduce AWS Lamb
 Right now, using this to package itself, here are the resulting packages sizes:
 
 ```console
-3.3M    Derp
-937K    Derp-packaged
-724K    Derp.zip
-208K    Derp-packaged.zip
+9.9M    derp
+1.7M    derp-packaged
 ```
-
-(Not sure if the zip files size is relevant, including it just in case)
 
 And number of files:
 
 ```console
-696     Derp
-218     Derp-packaged
+2182    derp
+347     derp-packaged
 ```
 
-(Pretty sure number of files is totally irrelevant :p)
+But honestly, the most useful feature right now is the `why` command that will tell you why a file is required.
 
 ## Usage
 
