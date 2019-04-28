@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace LambdaPackager\Tree;
 
 use ArrayIterator;
 use RecursiveIterator;
 use function count;
 
-class DependencyIterator extends ArrayIterator implements RecursiveIterator
+class TreeIterator extends ArrayIterator implements RecursiveIterator
 {
     private $dependency;
 
-    public function __construct(Dependency $dependency)
+    public function __construct(Node $dependency)
     {
         $this->dependency = $dependency;
 

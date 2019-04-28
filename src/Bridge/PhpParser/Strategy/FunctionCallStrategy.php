@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\Dependency;
+use LambdaPackager\Dependency\FileDependency;
 use PhpParser\Node;
 use ReflectionFunction;
 
@@ -25,6 +25,6 @@ class FunctionCallStrategy implements Strategy
     {
         $filePath = (new ReflectionFunction($node->toString()))->getFileName();
 
-        return [new Dependency($filePath)];
+        return [new FileDependency($filePath)];
     }
 }

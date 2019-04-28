@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Autoload;
 
-use LambdaPackager\Dependency;
+use LambdaPackager\Dependency\FileDependency;
+use LambdaPackager\Tree\Node;
 use LambdaPackager\Manifest;
 
 class ComposerAutoload implements Autoload
@@ -22,19 +23,23 @@ class ComposerAutoload implements Autoload
         require_once $this->projectRoot.'/vendor/autoload.php';
     }
 
-    /** @return Dependency[] */
+    /** @return Node[] */
     public function extractDependencies(): array
     {
-        $root = new Dependency($this->projectRoot.'/vendor/autoload.php');
+        $root = new FileDependency($this->projectRoot.'/vendor/autoload.php');
 
         foreach (glob($this->projectRoot.'/vendor/composer/*.php') as $filePath) {
             $root->createChild($filePath);
         }
 
-        if (count($deps = $root->findInChildren($this->projectRoot.'/vendor/composer/autoload_files.php')) > 0) {
-            $autoloadFiles = $deps[0];
+        $autoloadFilesDependencies = $root->filterChildren(function(FileDependency $dependency) {
+            return $dependency->getValue() === $this->projectRoot.'/vendor/composer/autoload_files.php';
+        });
 
-            foreach (array_values(include($autoloadFiles->getFilePath())) as $filePath) {
+        if (count($autoloadFilesDependencies) > 0) {
+            $autoloadFiles = $autoloadFilesDependencies[0];
+
+            foreach (array_values(include($autoloadFiles->getValue())) as $filePath) {
                 $autoloadFiles->createChild($filePath);
             }
         }

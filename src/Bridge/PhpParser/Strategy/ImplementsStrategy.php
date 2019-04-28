@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\ClassDependency;
+use LambdaPackager\Dependency\ClassDependency;
+use LambdaPackager\Dependency\FileDependency;
 use PhpParser\Node;
 
 class ImplementsStrategy extends ClassStrategy

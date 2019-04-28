@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Autoload;
 
-use LambdaPackager\Dependency;
+use LambdaPackager\Tree\Node;
 
 /**
  * Handles a particular Autoload strategy.
@@ -13,6 +13,6 @@ interface Autoload
 {
     public function initialize(): void;
 
-    /** @return Dependency[] */
+    /** @return Node[] */
     public function extractDependencies(): array;
 }

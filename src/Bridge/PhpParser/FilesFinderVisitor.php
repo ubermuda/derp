@@ -3,7 +3,7 @@
 namespace LambdaPackager\Bridge\PhpParser;
 
 use LambdaPackager\Bridge\PhpParser\Strategy;
-use LambdaPackager\Dependency;
+use LambdaPackager\Dependency\FileDependency;
 use LambdaPackager\Manifest;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -15,7 +15,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
     /** @var Strategy\Strategy[] */
     private $strategies = [];
 
-    /** @var Dependency[] */
+    /** @var FileDependency[] */
     private $dependencies = [];
 
     /** @var string */
@@ -47,7 +47,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
         return $this->dependencies;
     }
 
-    public function has(Dependency $dependency): bool
+    public function has(FileDependency $dependency): bool
     {
         foreach ($this->dependencies as $existingDependency) {
             if ($existingDependency->getFilePath() === $dependency->getFilePath()) {
@@ -58,14 +58,14 @@ class FilesFinderVisitor extends NodeVisitorAbstract
         return false;
     }
 
-    public function add(Dependency $dependency): self
+    public function add(FileDependency $dependency): self
     {
         $this->dependencies[] = $dependency;
 
         return $this;
     }
 
-    /** @var Dependency[] $dependencies */
+    /** @var FileDependency[] $dependencies */
     public function addAll(array $dependencies): self
     {
         foreach ($dependencies as $dependency) {

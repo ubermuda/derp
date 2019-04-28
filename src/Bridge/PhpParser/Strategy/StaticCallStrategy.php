@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
-use LambdaPackager\ClassDependency;
+use LambdaPackager\Dependency\ClassDependency;
 use PhpParser\Node;
 
 class StaticCallStrategy extends ClassStrategy

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace LambdaPackager\FileHandler;
 
-use LambdaPackager\Dependency;
+use LambdaPackager\Tree\Node;
 
 interface FileHandler
 {
-    /** @return Dependency[] */
-    public function extractDependencies(Dependency $dependency): array;
+    /** @return Node[] */
+    public function extractDependencies(Node $dependency): array;
 }

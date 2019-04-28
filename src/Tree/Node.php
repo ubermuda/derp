@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace LambdaPackager\Tree;
 
 use ArrayIterator;
 use IteratorAggregate;
 use RuntimeException;
 
-class Dependency implements IteratorAggregate
+class Node implements IteratorAggregate
 {
-    /** @var Dependency|null */
+    /** @var Node|null */
     private $parent;
 
     /** @var self[] */
     private $children = [];
 
-    /** @var string */
-    private $filePath;
+    /** @var mixed */
+    private $value;
 
-    public function __construct(string $filePath, ?Dependency $parent = null)
+    public function __construct($value, ?Node $parent = null)
     {
-        $this->filePath = realpath($filePath);
+        $this->value = realpath($value);
         $this->parent = $parent;
 
         if (null !== $parent) {
@@ -29,9 +29,9 @@ class Dependency implements IteratorAggregate
         }
     }
 
-    public function getFilePath(): string
+    public function getValue()
     {
-        return $this->filePath;
+        return $this->value;
     }
 
     public function isRoot(): bool
@@ -39,7 +39,7 @@ class Dependency implements IteratorAggregate
         return null === $this->parent;
     }
 
-    public function setParent(Dependency $parent): self
+    public function setParent(Node $parent): self
     {
         $this->parent = $parent;
 
@@ -47,7 +47,7 @@ class Dependency implements IteratorAggregate
     }
 
     /** @throws RuntimeException */
-    public function getParent(): Dependency
+    public function getParent(): Node
     {
         if ($this->isRoot()) {
             throw new RuntimeException('Cannot get parent of a root node');
@@ -56,12 +56,12 @@ class Dependency implements IteratorAggregate
         return $this->parent;
     }
 
-    public function createChild(string $filePath): Dependency
+    public function createChild($value): Node
     {
-        return new self($filePath, $this);
+        return new static($value, $this);
     }
 
-    /** @return Dependency[] */
+    /** @return Node[] */
     public function all(): array
     {
         return $this->children;
@@ -76,7 +76,7 @@ class Dependency implements IteratorAggregate
         return $this;
     }
 
-    /** @param Dependency[] $children */
+    /** @param Node[] $children */
     public function addAll(array $children): self
     {
         foreach ($children as $child) {
@@ -86,17 +86,17 @@ class Dependency implements IteratorAggregate
         return $this;
     }
 
-    /** @return Dependency[] */
-    public function findInChildren(string $pattern): array
+    /** @return Node[] */
+    public function filterChildren(callable $filter): array
     {
         $results = [];
 
         foreach ($this->children as $child) {
-            if (fnmatch($pattern, $child->getFilePath())) {
+            if ($filter($child)) {
                 $results[] = $child;
             }
 
-            $results = array_merge($results, $child->findInChildren($pattern));
+            $results = array_merge($results, $child->filterChildren($filter));
         }
 
         return $results;

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager;
+namespace LambdaPackager\Dependency;
 
 use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\FileHandler\FileHandlerRegistry;
+use LambdaPackager\Manifest;
+use LambdaPackager\Tree\Node;
 
 class DependencyTreeBuilder
 {
@@ -21,29 +23,28 @@ class DependencyTreeBuilder
         $this->handlerRegistry = new FileHandlerRegistry($manifest);
     }
 
-    public static function buildFromManifestPath(string $manifestPath): Dependency
+    public static function buildFromManifestPath(string $manifestPath): Node
     {
         return (new self(new Manifest($manifestPath)))->build();
     }
 
-    public function build(): Dependency
+    public function build(): Node
     {
         $this->manifest->getAutoloadManager()->initialize();
 
-        $root = new Dependency($this->manifest->getManifestPath());
+        $root = new Node($this->manifest->getManifestPath());
 
         $autoload = (new AutoloadFactory())->createForManifest($this->manifest);
         $root->addAll($autoload->extractDependencies());
 
         foreach ($this->manifest as $filePath) {
-//            echo '>>> Processing manifest dependency '.$filePath.PHP_EOL;
             $this->processDependency($root->createChild($filePath));
         }
 
         return $root;
     }
 
-    private function processDependency(Dependency $dependency)
+    private function processDependency(Node $dependency)
     {
         $this->markAsSeen($dependency);
 
@@ -54,19 +55,18 @@ class DependencyTreeBuilder
 
         foreach ($children as $child) {
             if (!$this->isCircularDependency($child)) {
-//                echo '>>> Processing child dependency '.$child->getFilePath().PHP_EOL;
                 $this->processDependency($child);
             }
         }
     }
 
-    private function markAsSeen(Dependency $dependency)
+    private function markAsSeen(Node $dependency)
     {
-        $this->seenFilePaths[$dependency->getFilePath()] = true;
+        $this->seenFilePaths[$dependency->getValue()] = true;
     }
 
-    private function isCircularDependency(Dependency $dependency): bool
+    private function isCircularDependency(Node $dependency): bool
     {
-        return isset($this->seenFilePaths[$dependency->getFilePath()]);
+        return isset($this->seenFilePaths[$dependency->getValue()]);
     }
 }

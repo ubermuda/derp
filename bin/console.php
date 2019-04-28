@@ -3,13 +3,13 @@
 
 declare(strict_types=1);
 
-use LambdaPackager\Dependency;
-use LambdaPackager\DependencyTreeBuilder;
+use LambdaPackager\Tree\Node;
+use LambdaPackager\Dependency\DependencyTreeBuilder;
 use LambdaPackager\Extension\ExtensionCollection;
 use LambdaPackager\Extension\ReplaceInPathExtension;
 use LambdaPackager\Manifest;
 use LambdaPackager\Packager;
-use LambdaPackager\RecursiveDependencyIterator;
+use LambdaPackager\Tree\RecursiveTreeIterator;
 use Silly\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -22,9 +22,9 @@ $app->command('print manifest', function(string $manifest, OutputInterface $outp
     $root = DependencyTreeBuilder::buildFromManifestPath($manifest);
     $files = [];
 
-    /** @var Dependency $dependency */
-    foreach (new RecursiveDependencyIterator($root) as $dependency) {
-        $files[$dependency->getFilePath()] = true;
+    /** @var Node $dependency */
+    foreach (new RecursiveTreeIterator($root) as $dependency) {
+        $files[$dependency->getValue()] = true;
     }
 
     $output->writeln(array_keys($files));
@@ -34,7 +34,9 @@ $app->command('why manifest pattern [--absolute]', function(string $manifest, st
     $manifest = new Manifest($manifest);
     $root = (new DependencyTreeBuilder($manifest))->build();
 
-    $deps = $root->findInChildren($pattern);
+    $deps = $root->filterChildren(function(Node $node) use ($pattern) {
+        return fnmatch($node->getValue(), $pattern);
+    });
 
     if (count($deps) === 0) {
         $io->error('No occurrences found.');
@@ -45,11 +47,11 @@ $app->command('why manifest pattern [--absolute]', function(string $manifest, st
     $io->title(sprintf('Found %d occurrences:', count($deps)));
 
     foreach ($deps as $dep) {
-        $path = [$dep->getFilePath()];
+        $path = [$dep->getValue()];
 
         while (!$dep->isRoot()) {
             $dep = $dep->getParent();
-            $path[] = $dep->getFilePath();
+            $path[] = $dep->getValue();
         }
 
         if (!$absolute) {

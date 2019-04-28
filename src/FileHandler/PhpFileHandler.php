@@ -6,8 +6,8 @@ namespace LambdaPackager\FileHandler;
 
 use LambdaPackager\Bridge\PhpParser\CouldNotProcessNodeException;
 use LambdaPackager\Bridge\PhpParser\FilesFinderVisitor;
-use LambdaPackager\ClassDependency;
-use LambdaPackager\Dependency;
+use LambdaPackager\Dependency\ClassDependency;
+use LambdaPackager\Tree\Node;
 use LambdaPackager\Manifest;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -42,28 +42,28 @@ class PhpFileHandler implements FileHandler
         $this->manifest = $manifest;
     }
 
-    public function extractDependencies(Dependency $dependency): array
+    public function extractDependencies(Node $dependency): array
     {
-        $stmts = $this->parser->parse(file_get_contents($dependency->getFilePath()));
+        $stmts = $this->parser->parse(file_get_contents($dependency->getValue()));
 
         try {
             $this->traverser->traverse($stmts);
         } catch (CouldNotProcessNodeException $e) {
-            throw new RuntimeException(sprintf('Error while processing node in "%s" at line %d', $dependency->getFilePath(), $e->getNode()->getStartLine()), 0, $e);
+            throw new RuntimeException(sprintf('Error while processing node in "%s" at line %d', $dependency->getValue(), $e->getNode()->getStartLine()), 0, $e);
         }
 
         return $this->getUniqueDependencies($this->visitor->all());
     }
 
     /**
-     * @param Dependency[] $dependencies
+     * @param Node[] $dependencies
      */
     private function getUniqueDependencies(array $dependencies): array
     {
         $uniqueDependencies = [];
 
         foreach ($dependencies as $dependency) {
-            $uniqueDependencies[$dependency->getFilePath()] = $dependency;
+            $uniqueDependencies[$dependency->getValue()] = $dependency;
         }
 
         return array_values($uniqueDependencies);

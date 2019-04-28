@@ -4,8 +4,8 @@
 declare(strict_types=1);
 
 use Alom\Graphviz\Digraph;
-use LambdaPackager\Dependency;
-use LambdaPackager\DependencyTreeBuilder;
+use LambdaPackager\Tree\Node;
+use LambdaPackager\Dependency\DependencyTreeBuilder;
 use LambdaPackager\Manifest;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -24,22 +24,22 @@ $graph = new class
         $this->graph = new Digraph('G');
     }
 
-    public function build(Dependency $dependency)
+    public function build(Node $dependency)
     {
         $this->processDependency($dependency);
 
         return $this->graph->render();
     }
 
-    private function processDependency(Dependency $dependency): void
+    private function processDependency(Node $dependency): void
     {
-        /** @var Dependency $child */
+        /** @var Node $child */
         foreach ($dependency as $child) {
-            if (in_array(basename($dependency->getFilePath()), ['Php7.php', 'Php5.php'])) {
+            if (in_array(basename($dependency->getValue()), ['Php7.php', 'Php5.php'])) {
                 continue;
             }
 
-            $this->graph->edge([basename($dependency->getFilePath()), basename($child->getFilePath())]);
+            $this->graph->edge([basename($dependency->getValue()), basename($child->getValue())]);
             $this->processDependency($child);
         }
     }
