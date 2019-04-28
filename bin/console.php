@@ -35,7 +35,7 @@ $app->command('why manifest pattern [--absolute]', function(string $manifest, st
     $root = (new DependencyTreeBuilder($manifest))->build();
 
     $deps = $root->filterChildren(function(Node $node) use ($pattern) {
-        return fnmatch($node->getValue(), $pattern);
+        return fnmatch($pattern, $node->getValue());
     });
 
     if (count($deps) === 0) {
