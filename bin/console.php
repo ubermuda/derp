@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 use LambdaPackager\Tree\Node;
 use LambdaPackager\Dependency\DependencyTreeBuilder;
-use LambdaPackager\Extension\ExtensionCollection;
-use LambdaPackager\Extension\ReplaceInPathExtension;
+use LambdaPackager\Extension\Collection;
+use LambdaPackager\Extension\ReplaceInPath;
 use LambdaPackager\Manifest;
 use LambdaPackager\Packager;
 use LambdaPackager\Tree\RecursiveTreeIterator;
@@ -65,8 +65,8 @@ $app->command('why manifest pattern [--absolute]', function(string $manifest, st
 });
 
 $app->command('package manifest target', function (string $manifest, string $target, OutputInterface $output) {
-    $extension = new ExtensionCollection([
-        new ReplaceInPathExtension([realpath(__DIR__.'/..') => '%manifest.project_root%'])
+    $extension = new Collection([
+        new ReplaceInPath([realpath(__DIR__.'/..') => '%manifest.project_root%'])
     ]);
 
     $packager = new Packager($manifest, $target, $extension);

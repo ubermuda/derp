@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace LambdaPackager\Extension;
 
+use LambdaPackager\ManifestAware;
+use LambdaPackager\ManifestAwareTrait;
 use RuntimeException;
 
-class ReplaceInPathExtension implements Extension, ManifestAwareExtension
+class ReplaceInPath implements Extension, ManifestAware
 {
-    use ManifestAwareExtensionTrait;
+    use ManifestAwareTrait;
 
     /** @var string[] */
     private $replacements;

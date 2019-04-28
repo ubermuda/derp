@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LambdaPackager\Bridge\PhpParser\Strategy;
 
 use LambdaPackager\Bridge\PhpParser\CouldNotAutoloadClassException;
-use LambdaPackager\Manifest;
+use LambdaPackager\ManifestAware;
+use LambdaPackager\ManifestAwareTrait;
 use ReflectionClass;
 
-abstract class ClassStrategy implements Strategy, ManifestAwareStrategy
+abstract class ClassStrategy implements Strategy, ManifestAware
 {
-    use ManifestAwareStrategyTrait;
+    use ManifestAwareTrait;
 
     protected function getClassFileName(string $className): string
     {

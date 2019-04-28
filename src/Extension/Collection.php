@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace LambdaPackager\Extension;
 
 use LambdaPackager\Manifest;
+use LambdaPackager\ManifestAware;
 
-class ExtensionCollection implements Extension, ManifestAwareExtension
+class Collection implements Extension, ManifestAware
 {
     /** @var Extension[] */
     private $extensions = [];
@@ -35,7 +36,7 @@ class ExtensionCollection implements Extension, ManifestAwareExtension
     public function setManifest(Manifest $manifest)
     {
         foreach ($this->extensions as $extension) {
-            if ($extension instanceof ManifestAwareExtension) {
+            if ($extension instanceof ManifestAware) {
                 $extension->setManifest($manifest);
             }
         }

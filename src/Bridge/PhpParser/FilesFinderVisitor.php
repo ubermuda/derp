@@ -5,6 +5,7 @@ namespace LambdaPackager\Bridge\PhpParser;
 use LambdaPackager\Bridge\PhpParser\Strategy;
 use LambdaPackager\Dependency\FileDependency;
 use LambdaPackager\Manifest;
+use LambdaPackager\ManifestAware;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -34,7 +35,7 @@ class FilesFinderVisitor extends NodeVisitorAbstract
         ];
 
         foreach ($this->strategies as $strategy) {
-            if ($strategy instanceof Strategy\ManifestAwareStrategy) {
+            if ($strategy instanceof ManifestAware) {
                 $strategy->setManifest($manifest);
             }
         }

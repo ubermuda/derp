@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LambdaPackager\Extension;
+namespace LambdaPackager;
 
-use LambdaPackager\Manifest;
-
-trait ManifestAwareExtensionTrait
+trait ManifestAwareTrait
 {
     /** @var Manifest */
     private $manifest;

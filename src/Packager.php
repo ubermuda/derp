@@ -7,7 +7,7 @@ namespace LambdaPackager;
 use LambdaPackager\Autoload\AutoloadFactory;
 use LambdaPackager\Dependency\DependencyTreeBuilder;
 use LambdaPackager\Extension\Extension;
-use LambdaPackager\Extension\ManifestAwareExtension;
+use LambdaPackager\ManifestAware;
 use LambdaPackager\Tree\Node;
 use LambdaPackager\Tree\RecursiveTreeIterator;
 use RuntimeException;
@@ -41,7 +41,7 @@ class Packager
 
         $this->buildDir = $buildDir;
 
-        if ($extension instanceof ManifestAwareExtension) {
+        if ($extension instanceof ManifestAware) {
             $extension->setManifest($this->manifest);
         }
 
